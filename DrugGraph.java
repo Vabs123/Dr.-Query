@@ -1,78 +1,265 @@
 import java.util.*;
 
 class DrugGraph{
-	LinkedList<DrugNode> gDrug;
-	LinkedList<SideEffect> gSideEffect;
-	LinkedList<DrugNode> gDrugInteraction;
-	LinkedList<Indicaton> gIndication;
-	LinkedList<Target> gTarget;
-	LinkedList<Pathway> gPathway;
+	HashSet<DrugNode> gDrug;
+	HashSet<SideEffect> gSideEffect;
+	HashSet<DrugNode> gDrugInteraction;
+	HashSet<Indication> gIndication;
+	HashSet<Target> gTarget;
+	HashSet<Pathway> gPathway;
 
 	DrugGraph(){
-		gDrug = new LinkedList<>();
-		gSideEffect = new LinkedList<>();
-		gDrugInteraction = new LinkedList<>();
-		gIndication = new LinkedList<>();
-		gTarget = new LinkedList<>();
-		gPathway = new LinkedList<>();
+		gDrug = new HashSet<>();
+		gSideEffect = new HashSet<>();
+		gDrugInteraction = new HashSet<>();
+		gIndication = new HashSet<>();
+		gTarget = new HashSet<>();
+		gPathway = new HashSet<>();
 	}
 
-	public boolean conatinsSE(String sname){
+	public SideEffect conatinsSE(String sname){
 		Iterator<SideEffect> it = gSideEffect.iterator();
 		while(it.hasNext()){
-			if(it.next().name.equals(sname))
-				return true;
+			SideEffect se = it.next();
+			if(se.name.equals(sname))
+				return se;
 		} 
-		return false;
+		return null;
 	}
 
-	public boolean conatinsD(String sname){
+	public DrugNode conatinsD(String sname){
 		Iterator<DrugNode> it = gDrug.iterator();
 		while(it.hasNext()){
-			if(it.next().name.equals(sname))
-				return true;
+			DrugNode drug = it.next();
+			if(drug.name.equals(sname))
+				return drug;
 		} 
-		return false;
+		return null;
 	}
 
-	public boolean containsI(String sname){
-		Iterator<Indicaton> it = gIndication.iterator();
+	public Indication containsI(String sname){
+		Iterator<Indication> it = gIndication.iterator();
 		while(it.hasNext()){
-			if(it.next().name.equals(sname))
-				return true;
+			Indication indication = it.next();
+			if(indication.name.equals(sname))
+				return indication;
 		} 
-		return false;
+		return null;
 	}
 
-	public boolean containsT(String sname){
+	public Target containsT(String sname){
 		Iterator<Target> it = gTarget.iterator();
 		while(it.hasNext()){
-			if(it.next().name.equals(sname))
-				return true;
+			Target target = it.next();
+			if(target.name.equals(sname))
+				return target;
 		} 
-		return false;
+		return null;
 	}
 
-	public boolean conatinsP(String sname){
+	public Pathway containsP(String sname){
 		Iterator<Pathway> it = gPathway.iterator();
 		while(it.hasNext()){
-			if(it.next().name.equals(sname))
-				return true;
+			Pathway pathway = it.next();
+			if(pathway.name.equals(sname))
+				return pathway;
 		} 
-		return false;
+		return null;
 	}
 
-	public void create(String drugName, String sideEffect, String indication, String target, String pathway){
-		Iterator<SideEffect> it = gSideEffect.iterator();
-		while(it.hasNext()){
-			if(it.next().name.equals(sname))
-				return true;
-		} 
-		return false;
+	public void addSideEffect(DrugNode drugNode, HashSet<String> se){//If drugs are not unique make a check function so that the twice 
+		//twice entry of a drug in sideeffect list can be avoided...
+		SideEffect sEffect;
+		for(String s:se){
+			sEffect = conatinsSE(s);
+			if(sEffect == null){
+				sEffect = new SideEffect(s);
+				gSideEffect.add(sEffect);
+
+			}
+			sEffect.drugName.add(drugNode);
+			drugNode.sideEffect.add(sEffect);
+		}
 	}
+
+	public void addIndication(DrugNode drugNode, HashSet<String> i){
+		Indication ind;
+		for(String s:i){
+			ind = containsI(s);
+			if(ind == null){
+				ind = new Indication(s);
+				gIndication.add(ind);
+
+			}
+			ind.drugName.add(drugNode);
+			drugNode.indication.add(ind);
+		}
+	}
+
+	public void addTarget(DrugNode drugNode, HashSet<String> t){
+		Target tar;
+		for(String s:t){
+			tar = containsT(s);
+			if(tar == null){
+				tar = new Target(s);
+				gTarget.add(tar);
+
+			}
+			tar.drugName.add(drugNode);
+			drugNode.target.add(tar);
+		}
+	}
+
+	public void addPathway(DrugNode drugNode, HashSet<String> p){
+		Pathway path;
+		for(String s:p){
+			path = containsP(s);
+			if(path == null){
+				path = new Pathway(s);
+				gPathway.add(path);
+
+			}
+			path.drugName.add(drugNode);
+			drugNode.pathway.add(path);
+		}
+	}
+
+	public void addDrugInteraction(DrugNode drugNode, HashSet<String> d_d){
+		DrugNode dNode;
+		for(String s:d_d){
+			dNode = conatinsD(s);
+			if(dNode == null){
+				dNode = new DrugNode(s);
+				gDrug.add(dNode);
+			}
+			dNode.drugInteraction.add(drugNode);
+			drugNode.drugInteraction.add(dNode);
+		}
+	}
+
+
+
+	public void create(String drugName, HashSet<String> sEffect, HashSet<String> indi, HashSet<String> tar, HashSet<String> path, HashSet<String> drug_drug){
+		// checkng if drug exists or not
+		DrugNode drugNode = conatinsD(drugName);
+
+		//if exists just update/add the attributes of drugnode
+		if(drugNode == null){
+			drugNode = new DrugNode(drugName);
+			gDrug.add(drugNode);
+		}
+		addSideEffect(drugNode, sEffect);
+		addIndication(drugNode, indi);
+		addTarget(drugNode, tar);
+		addPathway(drugNode, path);
+		addDrugInteraction(drugNode, drug_drug);	
+	}
+
+
+	public void printDrug(DrugNode drug){
+		printSE(drug);
+		printI(drug);
+		printT(drug);
+		printP(drug);
+		printd_d(drug);
+	}
+
+	public void printSE(DrugNode d){
+		System.out.println(d.name+" - SideEffects --->");
+		for(SideEffect se:d.sideEffect){
+			System.out.println(se.name);
+		}
+	}
+
+	public void printT(DrugNode d){
+		System.out.println(d.name+" - Targets --->");
+		for(Target se:d.target){
+			System.out.println(se.name);
+		}
+	}
+
+	public void printI(DrugNode d){
+		System.out.println(d.name+" - Indications --->");
+		for(Indication se:d.indication){
+			System.out.println(se.name);
+		}
+	}
+
+	public void printP(DrugNode d){
+		System.out.println(d.name+" - Pathway --->");
+		for(Pathway se:d.pathway){
+			System.out.println(se.name);
+		}
+	}
+
+	public void printd_d(DrugNode d){
+		System.out.println(d.name+" - drugInteractions --->");
+		for(DrugNode se:d.drugInteraction){
+			System.out.println(se.name);
+		}
+	}
+
+	
 
 	public static void main(String[] args) {
+		HashSet<String> se = new HashSet<>();
+		HashSet<String> i = new HashSet<>();
+		HashSet<String> t = new HashSet<>();
+		HashSet<String> p = new HashSet<>();
+		HashSet<String> d_d = new HashSet<>();
+		se.add("se1");
+		se.add("se2");
+		se.add("se3");
+
+		i.add("i1");
+		i.add("i2");
+		i.add("i3");
+
+		t.add("t1");
+		t.add("t2");
+		t.add("t3");
+
+		p.add("p1");
+		p.add("p2");
+		p.add("p3");
+
+		d_d.add("drug2");
+		d_d.add("drug3");
+		d_d.add("drug4");
+
+		DrugGraph dg = new DrugGraph();
+		dg.create("drug1", se, i, t, p, d_d);
 		
+
+		System.out.println("Drugs ---------------------------->");
+
+		for(DrugNode d:dg.gDrug){
+			dg.printDrug(d);
+			System.out.println("----------------------------------------------------------------------");
+		}	
+
+		/*System.out.println("SideEffects -------------------------------->");
+
+		for(SideEffect d:dg.gSideEffect){
+			System.out.println(d.name);
+		}
+
+		System.out.println("Indiations -------------------------------------->");
+		for(Indication d:dg.gIndication){
+			System.out.println(d.name);
+		}
+
+		System.out.println("Pathways -------------------------------------------->");
+		for(Pathway d:dg.gPathway){
+			System.out.println(d.name);
+		}
+
+		System.out.println("Targets ------------------------------------------------>");
+		for(Target d:dg.gTarget){
+			System.out.println(d.name);
+		}*/
+
+
 	}
 	
 }

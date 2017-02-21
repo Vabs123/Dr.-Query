@@ -1,9 +1,11 @@
+import java.util.*;
+
 class Pathway{
 	String name;
-	LinkedList<DrugNode> drugName;
+	HashSet<DrugNode> drugName;
 
 	Pathway(String pathway){
 		name = pathway;
-		drugName = new LinkedList<>();
+		drugName = new HashSet<>();
 	}
 }

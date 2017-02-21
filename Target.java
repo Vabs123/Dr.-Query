@@ -1,11 +1,11 @@
-import java.util.LinkedList;
+import java.util.*;
 
 class Target{
-	String target;
-	LinkedList<DrugNode> drugName;
+	String name;
+	HashSet<DrugNode> drugName;
 
 	Target(String target){
-		this.target = target;
-		drugName = new LinkedList<>(); 
+		name = target;
+		drugName = new HashSet<>(); 
 	}
 }

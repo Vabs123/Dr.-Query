@@ -1,11 +1,11 @@
-import java.util.LinkedList;
+import java.util.*;
 
 class Indication{
 	String name;
-	LinkedList<DrugNode> drugName;
+	HashSet<DrugNode> drugName;
 
 	Indication(String indication){
 		name = indication;
-		drugName = new LinkedList<>();
+		drugName = new HashSet<>();
 	} 
 }

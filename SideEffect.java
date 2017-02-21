@@ -1,10 +1,10 @@
-import java.util.LinkedList;
+import java.util.*;
 
 class SideEffect{
 	String name;
-	LinkedList<DrugNode> drugName;
+	HashSet<DrugNode> drugName;
 	SideEffect(String sideEffect){
 		name = sideEffect;
-		drugName = new LinkedList<>();
+		drugName = new HashSet<>();
 	}
 }

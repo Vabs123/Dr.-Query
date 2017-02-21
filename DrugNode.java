@@ -1,19 +1,19 @@
-import java.util.LinkedList;
+import java.util.*;
 
 class DrugNode{
-	Strng name;
-	LinkedList<SideEffect> sideEffect;
-	LinkedList<DrugNode> drugInteraction;
-	LinkedList<Indicaton> indication;
-	LinkedList<Target> target;
-	LinkedList<Pathway> pathway;
+	String name;
+	HashSet<SideEffect> sideEffect;
+	HashSet<DrugNode> drugInteraction;
+	HashSet<Indication> indication;
+	HashSet<Target> target;
+	HashSet<Pathway> pathway;
 
 	DrugNode(String name){
 		this.name = name;
-		sideEffect = new LinkedList<>();
-		drugInteraction = new LinkedList<>();
-		indication = new LinkedList<>();
-		target = new LinkedList<>();
-		pathway = new LinkedList<>();
+		sideEffect = new HashSet<>();
+		drugInteraction = new HashSet<>();
+		indication = new HashSet<>();
+		target = new HashSet<>();
+		pathway = new HashSet<>();
 	}
 }
