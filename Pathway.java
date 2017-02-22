@@ -1,6 +1,7 @@
 import java.util.*;
+import java.io.*;
 
-class Pathway{
+class Pathway implements Serializable{
 	String name;
 	HashSet<DrugNode> drugName;
 

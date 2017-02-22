@@ -1,6 +1,7 @@
 import java.util.*;
+import java.io.*;
 
-class Indication{
+class Indication implements Serializable{
 	String name;
 	HashSet<DrugNode> drugName;
 

@@ -1,9 +1,9 @@
 import java.util.*;
+import java.io.*;
 
 class DrugGraph{
 	HashSet<DrugNode> gDrug;
 	HashSet<SideEffect> gSideEffect;
-	HashSet<DrugNode> gDrugInteraction;
 	HashSet<Indication> gIndication;
 	HashSet<Target> gTarget;
 	HashSet<Pathway> gPathway;
@@ -11,7 +11,6 @@ class DrugGraph{
 	DrugGraph(){
 		gDrug = new HashSet<>();
 		gSideEffect = new HashSet<>();
-		gDrugInteraction = new HashSet<>();
 		gIndication = new HashSet<>();
 		gTarget = new HashSet<>();
 		gPathway = new HashSet<>();
@@ -201,7 +200,7 @@ class DrugGraph{
 
 	
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		HashSet<String> se = new HashSet<>();
 		HashSet<String> i = new HashSet<>();
 		HashSet<String> t = new HashSet<>();
@@ -231,6 +230,50 @@ class DrugGraph{
 		dg.create("drug1", se, i, t, p, d_d);
 		
 
+
+
+
+		 se = new HashSet<>();
+		 i = new HashSet<>();
+		 t = new HashSet<>();
+		 p = new HashSet<>();
+	    d_d = new HashSet<>();
+		se.add("se1");
+		se.add("se5");
+		se.add("se6");
+
+		i.add("i4");
+		i.add("i5");
+		i.add("i6");
+
+		t.add("t9");
+		t.add("t8");
+		t.add("t7");
+
+		p.add("p6");
+		p.add("p0");
+		p.add("p5");
+
+		d_d.add("drug9");
+		d_d.add("drug8");
+		d_d.add("drug7");
+
+		
+		dg.create("drug2", se, i, t, p, d_d);
+
+
+		SaveData sd = new SaveData(dg.gDrug, dg.gSideEffect, dg.gIndication, dg.gTarget, dg.gPathway);
+		sd.save();
+
+		sd.getData();
+
+		dg.gDrug = sd.drugList;
+		dg.gSideEffect = sd.sideEffectList;
+		dg.gIndication = sd.indicationList;
+		dg.gTarget = sd.targetList;
+		dg.gPathway = sd.pathwayList;
+
+
 		System.out.println("Drugs ---------------------------->");
 
 		for(DrugNode d:dg.gDrug){
@@ -238,6 +281,16 @@ class DrugGraph{
 			System.out.println("----------------------------------------------------------------------");
 		}	
 
+
+
+		System.out.println("SideEffects-----------------------------------------------------");
+		int count = 1;
+		for(SideEffect ss:dg.gSideEffect){
+			System.out.println("SideEffect "+count+++" NAME --> "+ss.name);
+			for(DrugNode dp:ss.drugName){
+				System.out.println(dp.name);
+			}
+		}
 		/*System.out.println("SideEffects -------------------------------->");
 
 		for(SideEffect d:dg.gSideEffect){

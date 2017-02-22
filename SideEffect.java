@@ -1,6 +1,7 @@
 import java.util.*;
+import java.io.*;
 
-class SideEffect{
+class SideEffect implements Serializable{
 	String name;
 	HashSet<DrugNode> drugName;
 	SideEffect(String sideEffect){

@@ -1,6 +1,6 @@
 import java.util.*;
-
-class Target{
+import java.io.*;
+class Target implements Serializable{
 	String name;
 	HashSet<DrugNode> drugName;
 
