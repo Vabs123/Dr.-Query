@@ -9,4 +9,8 @@ class Indication implements Serializable{
 		name = indication;
 		drugName = new HashSet<>();
 	} 
+	@Override
+	public String toString(){
+		return name;
+	}
 }

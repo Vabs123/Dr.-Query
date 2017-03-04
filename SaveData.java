@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 
-class SaveData implements Serializable{
+class SaveData {
 	HashSet<DrugNode> drugList;
 	HashSet<SideEffect> sideEffectList;
 	HashSet<Indication> indicationList;

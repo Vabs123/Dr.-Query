@@ -17,4 +17,9 @@ class DrugNode implements Serializable{
 		target = new HashSet<>();
 		pathway = new HashSet<>();
 	}
+
+	@Override
+	public String toString(){
+		return name;
+	}
 }

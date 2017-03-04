@@ -16,8 +16,16 @@ class WriteObject implements Serializable{
 		wo.lname.offer("brother");
 		wo.lname.offer("Bello");
 		out.writeObject(wo);
+		Poo p = new Poo(10);
+		out.writeObject(p);
 		fo.close();
 		out.close();
 
+	}
+}
+class Poo implements Serializable{
+	int data;
+	Poo(int d){
+		data = d;
 	}
 }

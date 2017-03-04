@@ -16,7 +16,7 @@ class DrugGraph{
 		gPathway = new HashSet<>();
 	}
 
-	public SideEffect conatinsSE(String sname){
+	public SideEffect containsSE(String sname){
 		Iterator<SideEffect> it = gSideEffect.iterator();
 		while(it.hasNext()){
 			SideEffect se = it.next();
@@ -26,7 +26,7 @@ class DrugGraph{
 		return null;
 	}
 
-	public DrugNode conatinsD(String sname){
+	public DrugNode containsD(String sname){
 		Iterator<DrugNode> it = gDrug.iterator();
 		while(it.hasNext()){
 			DrugNode drug = it.next();
@@ -70,7 +70,7 @@ class DrugGraph{
 		//twice entry of a drug in sideeffect list can be avoided...
 		SideEffect sEffect;
 		for(String s:se){
-			sEffect = conatinsSE(s);
+			sEffect = containsSE(s);
 			if(sEffect == null){
 				sEffect = new SideEffect(s);
 				gSideEffect.add(sEffect);
@@ -126,7 +126,7 @@ class DrugGraph{
 	public void addDrugInteraction(DrugNode drugNode, HashSet<String> d_d){
 		DrugNode dNode;
 		for(String s:d_d){
-			dNode = conatinsD(s);
+			dNode = containsD(s);
 			if(dNode == null){
 				dNode = new DrugNode(s);
 				gDrug.add(dNode);
@@ -140,7 +140,7 @@ class DrugGraph{
 
 	public void create(String drugName, HashSet<String> sEffect, HashSet<String> indi, HashSet<String> tar, HashSet<String> path, HashSet<String> drug_drug){
 		// checkng if drug exists or not
-		DrugNode drugNode = conatinsD(drugName);
+		DrugNode drugNode = containsD(drugName);
 
 		//if exists just update/add the attributes of drugnode
 		if(drugNode == null){
@@ -291,6 +291,14 @@ class DrugGraph{
 				System.out.println(dp.name);
 			}
 		}
+
+
+
+
+
+
+		System.out.println("--------------=====================================");
+		System.out.println(dg.gSideEffect.contains("se1"));
 		/*System.out.println("SideEffects -------------------------------->");
 
 		for(SideEffect d:dg.gSideEffect){

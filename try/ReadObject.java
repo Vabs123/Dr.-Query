@@ -11,6 +11,8 @@ class ReadObject{
 		ObjectInputStream oin = new ObjectInputStream(fi);
 		ro.wo = (WriteObject) oin.readObject();
 		System.out.println(ro.wo.lname+"ppppp");
+		Poo p = (Poo) oin.readObject();
+		System.out.println(p.data);
 		fi.close();
 		oin.close();
 	}

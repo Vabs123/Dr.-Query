@@ -8,4 +8,9 @@ class Target implements Serializable{
 		name = target;
 		drugName = new HashSet<>(); 
 	}
+
+	@Override
+	public String toString(){
+		return name;
+	}
 }

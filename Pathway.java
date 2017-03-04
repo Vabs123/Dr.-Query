@@ -9,4 +9,9 @@ class Pathway implements Serializable{
 		name = pathway;
 		drugName = new HashSet<>();
 	}
+
+	@Override
+	public String toString(){
+		return name;
+	}
 }

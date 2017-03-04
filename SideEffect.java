@@ -8,4 +8,9 @@ class SideEffect implements Serializable{
 		name = sideEffect;
 		drugName = new HashSet<>();
 	}
+
+	@Override
+	public String toString(){
+		return name;
+	}
 }
