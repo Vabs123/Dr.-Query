@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 
-class DrugGraph{
+class DrugGraph implements Serializable{
 	HashSet<DrugNode> gDrug;
 	HashSet<SideEffect> gSideEffect;
 	HashSet<Indication> gIndication;
@@ -262,16 +262,17 @@ class DrugGraph{
 		dg.create("drug2", se, i, t, p, d_d);
 
 
-		SaveData sd = new SaveData(dg.gDrug, dg.gSideEffect, dg.gIndication, dg.gTarget, dg.gPathway);
-		sd.save();
+	//	SaveData sd = new SaveData(dg.gDrug, dg.gSideEffect, dg.gIndication, dg.gTarget, dg.gPathway);
+	//	sd.save();
+		SaveData sd = new SaveData("drugDump.txt");
+		sd.saveData(dg);
+		dg = (DrugGraph)sd.getData();
 
-		sd.getData();
-
-		dg.gDrug = sd.drugList;
+	/*	dg.gDrug = sd.drugList;
 		dg.gSideEffect = sd.sideEffectList;
 		dg.gIndication = sd.indicationList;
 		dg.gTarget = sd.targetList;
-		dg.gPathway = sd.pathwayList;
+		dg.gPathway = sd.pathwayList;*/
 
 
 		System.out.println("Drugs ---------------------------->");

@@ -1,24 +1,26 @@
 import java.util.*;
-
+import java.io.*;
 class Test{
-	String name;
-	Test t;
-	Test(String n){
-		name = n;
-		t = null;
+	
+	public void save(Object o)throws IOException{
+		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("abc.txt"));
+		out.writeObject(o);
+		out.close();
 	}
 
-	@Override
-	public String toString(){
-		return name;
+	public Object get()throws IOException, ClassNotFoundException{
+		ObjectInputStream oin = new ObjectInputStream(new FileInputStream("abc.txt"));
+		Object o = oin.readObject();
+		oin.close();
+		return o;
 	}
 
-
-	public static void main(String[] args) {
-		Test t1 = new Test("hello");
-		Test t2 = new Test("hello");
-		String s1 = t1.toString();
-		String s2 = t2.toString();
-		System.out.println(t1.toString().equals(t2.toString()));
+	public static void main(String[] args) throws IOException,ClassNotFoundException{
+		HashMap<String, Integer> data = new HashMap<>();
+		data.put("hello",1);
+		Test t = new Test();
+		t.save(data);
+		data = (HashMap<String, Integer>)t.get();
+		System.out.println(data); 
 	}
 }
