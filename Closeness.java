@@ -43,7 +43,7 @@ class Closeness implements Serializable{
 
 	/// Only Path count is used as metric for closeness
 
-	public void setSEClosenessPT1(DrugGraph dg){
+	public int getSEClosenessPT1(DrugGraph dg, String drug){
 		seClosenessPT1 = new HashMap<>();
 		int count = 0;
 		HashSet<DrugNode> drugList1 = new HashSet<>();
