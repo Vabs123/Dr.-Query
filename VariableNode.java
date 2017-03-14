@@ -9,13 +9,13 @@ class VariableNode{
 		positiveEdges = new PositiveEdge();
 	}
 
-	public void addSE(HashSet<String> se){
+	public void addSE(LinkedList<String> se){
 		negativeEdges.sideEffect.addAll(se);
 	}
-	public void addDInteraction(HashSet<String> dd){
+	public void addDInteraction(LinkedList<String> dd){
 		negativeEdges.drugInteraction.addAll(dd);
 	}
-	public void addIndication(HashSet<String> indi){
+	public void addIndication(LinkedList<String> indi){
 		positiveEdges.indication.addAll(indi);
 	}
 	

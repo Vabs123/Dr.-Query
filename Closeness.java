@@ -1,262 +1,244 @@
 import java.util.*;
 import java.io.*;
+
 class Closeness implements Serializable{
-	HashMap<String, Integer> seClosenessPT1;
-	HashMap<String, Integer> seClosenessPT2;
-	HashMap<String, Integer> seClosenessPT3;
-	HashMap<String, Integer> iClosenessPT1;
-	HashMap<String, Integer> iClosenessPT2;
-	HashMap<String, Integer> iClosenessPT3;
-	HashMap<String, Integer> ddClosenessPT1;
-	HashMap<String, Integer> ddClosenessPT2;
-	HashMap<String, Integer> ddClosenessPT3;
-
-
-	// This class will run only one time and write all closennes values in a file.
-
-	public ArrayList<Integer> getCloseness(String type, String key) throws IOException,ClassNotFoundException{
-		ArrayList<Integer> closeness = new ArrayList<>();
-		Closeness c = null;
-		SaveData sd = new SaveData("closeness.txt");
-		c = (Closeness)sd.getData();
-		if(type.equals("SideEffect")){
-			closeness.add(c.seClosenessPT1.get(key));
-			closeness.add(c.seClosenessPT2.get(key));
-			closeness.add(c.seClosenessPT3.get(key));
-		}
-		else if(type.equals("Indication")){
-			closeness.add(c.iClosenessPT1.get(key));
-			closeness.add(c.iClosenessPT2.get(key));
-			closeness.add(c.iClosenessPT3.get(key));
-		}
-		else if(type.equals("DrugInteraction")){
-			closeness.add(c.ddClosenessPT1.get(key));
-			closeness.add(c.ddClosenessPT2.get(key));
-			closeness.add(c.ddClosenessPT3.get(key));
-		}
-		return closeness;
-	}
-
-	//Training
-	//SideEffect 
+	HashMap<String, ArrayList<Integer>> seClosenessPT1;
+	HashMap<String, ArrayList<Integer>> seClosenessPT2;
+	HashMap<String, ArrayList<Integer>> seClosenessPT3;
+	HashMap<String, ArrayList<Integer>> iClosenessPT1;
+	HashMap<String, ArrayList<Integer>> iClosenessPT2;
+	HashMap<String, ArrayList<Integer>> iClosenessPT3;
+	HashMap<String, ArrayList<Integer>> ddClosenessPT1;
+	HashMap<String, ArrayList<Integer>> ddClosenessPT2;
+	HashMap<String, ArrayList<Integer>> ddClosenessPT3;
+	
 	//SideEffect PathTypes -> D-D-SE(PathType1), D-I-D-SE(PathType2), D-SE-D-SE(PathType3)
-
-	/// Only Path count is used as metric for closeness
-
-	public int getSEClosenessPT1(DrugGraph dg, String drug){
-		seClosenessPT1 = new HashMap<>();
+	// Only Path count is used as metric for closeness
+	
+	public void setSEClosenessPT1(DrugGraph dg){
 		int count = 0;
-		HashSet<DrugNode> drugList1 = new HashSet<>();
-		HashSet<DrugNode> drugList2 = new HashSet<>();
+		this.seClosenessPT1 = new HashMap<>();
+		ArrayList<Integer> seCloseness;
 		for(SideEffect se:dg.gSideEffect){
-			count = 0;
-			drugList1 = se.drugName;
-			for(DrugNode drugNode:drugList1){
-				drugList2 = drugNode.drugInteraction;
-				count += drugList2.size();
+			seCloseness = new ArrayList<>();
+			for(DrugNode d1:se.drugName){
+				count = 0;
+				for(DrugNode d2:se.drugName){
+					if(d1.name.equals(d2.name))
+						continue;
+					if(d2.containsDD(d1.name) != null)
+						count++;
+				}
+				seCloseness.add(count);
 			}
-			seClosenessPT1.put(se.name, count);
+			seClosenessPT1.put(se.name, seCloseness);
 		}
 	}
-
+	//D-I-D-SE(PathType2)
 	public void setSEClosenessPT2(DrugGraph dg){
-		seClosenessPT2 = new HashMap<>();
 		int count = 0;
-		HashSet<DrugNode> drugList1 = new HashSet<>();
-		HashSet<DrugNode> drugList2 = new HashSet<>();
-		HashSet<Indication> iList = new HashSet<>();
+		this.seClosenessPT2 = new HashMap<>();
+		ArrayList<Integer> seCloseness;
 		for(SideEffect se:dg.gSideEffect){
-			count = 0;
-			drugList1 = se.drugName;
-			for(DrugNode drugNode:drugList1){
-				iList = drugNode.indication;
-				for(Indication i:iList){
-					drugList2 = i.drugName;
-					count += drugList2.size();
+			seCloseness = new ArrayList<>();
+			for(DrugNode d1:se.drugName){
+				count = 0;
+				for(DrugNode d2:se.drugName){
+					if(d1.name.equals(d2.name))
+						continue;
+					for(Indication i:d2.indication){
+						if(i.containsDrug(d1.name) != null)
+							count++;
+					}
 				}
+				seCloseness.add(count);
 			}
-			seClosenessPT2.put(se.name, count);
+			seClosenessPT2.put(se.name,seCloseness);
 		}
 	}
 
-
+	//D-SE-D-SE(PathType3)
 	public void setSEClosenessPT3(DrugGraph dg){
-		seClosenessPT3 = new HashMap<>();
 		int count = 0;
-		HashSet<DrugNode> drugList1 = new HashSet<>();
-		HashSet<DrugNode> drugList2 = new HashSet<>();
-		HashSet<SideEffect> seList = new HashSet<>();
+		this.seClosenessPT3 = new HashMap<>();
+		ArrayList<Integer> seCloseness;
 		for(SideEffect se:dg.gSideEffect){
-			count = 0;
-			drugList1 = se.drugName;
-			for(DrugNode drugNode:drugList1){
-				seList = drugNode.sideEffect;
-				for(SideEffect sE:seList){
-					drugList2 = sE.drugName;
-					count += drugList2.size();
+			seCloseness = new ArrayList<>();
+			for(DrugNode d1:se.drugName){
+				count = 0;
+				for(DrugNode d2:se.drugName){
+					if(d1.name.equals(d2.name))
+						continue;
+					for(SideEffect sideEffect:d2.sideEffect){
+						if(sideEffect.containsDrug(d1.name) != null)
+							count++;
+					}
 				}
+				seCloseness.add(count);
 			}
-			seClosenessPT3.put(se.name, count);
+			seClosenessPT3.put(se.name,seCloseness);
 		}
 	}
+
+	
 
 	//Indication
 	//Indication PathTypes -> D-D-I(PT1), D-I-D-I(PT2), D-SE-D-I(PT3)
 
-
 	public void setIClosenessPT1(DrugGraph dg){
-		iClosenessPT1 = new HashMap<>();
 		int count = 0;
-		HashSet<DrugNode> drugList1 = new HashSet<>();
-		HashSet<DrugNode> drugList2 = new HashSet<>();
+		this.iClosenessPT1 = new HashMap<>();
+		ArrayList<Integer> iCloseness;
 		for(Indication i:dg.gIndication){
-			count = 0;
-			drugList1 = i.drugName;
-			for(DrugNode drugNode:drugList1){
-				drugList2 = drugNode.drugInteraction;
-				count += drugList2.size();
+			iCloseness = new ArrayList<>();
+			for(DrugNode d1:i.drugName){
+				count = 0;
+				for(DrugNode d2:i.drugName){
+					if(d1.name.equals(d2.name))
+						continue;
+					if(d2.containsDD(d1.name) != null)
+						count++;
+				}
+				iCloseness.add(count);
 			}
-			iClosenessPT1.put(i.name, count);
+			iClosenessPT1.put(i.name, iCloseness);
 		}
 	}
 
+	// D-I-D-I(PT2)
 	public void setIClosenessPT2(DrugGraph dg){
-		iClosenessPT2 = new HashMap<>();
 		int count = 0;
-		HashSet<DrugNode> drugList1 = new HashSet<>();
-		HashSet<DrugNode> drugList2 = new HashSet<>();
-		HashSet<Indication> iList = new HashSet<>();
-		for(Indication ind:dg.gIndication){
-			count = 0;
-			drugList1 = ind.drugName;
-			for(DrugNode drugNode:drugList1){
-				iList = drugNode.indication;
-				for(Indication i:iList){
-					drugList2 = i.drugName;
-					count += drugList2.size();
+		this.iClosenessPT2 = new HashMap<>();
+		ArrayList<Integer> iCloseness;
+		for(Indication indi:dg.gIndication){
+			iCloseness = new ArrayList<>();
+			for(DrugNode d1:indi.drugName){
+				count = 0;
+				for(DrugNode d2:indi.drugName){
+					if(d1.name.equals(d2.name))
+						continue;
+					for(Indication i:d2.indication){
+						if(i.containsDrug(d1.name) != null)
+							count++;
+					}
 				}
+				iCloseness.add(count);
 			}
-			iClosenessPT2.put(ind.name, count);
+			iClosenessPT2.put(indi.name,iCloseness);
 		}
 	}
 
+	//D-SE-D-I(PT3)
 	public void setIClosenessPT3(DrugGraph dg){
-		iClosenessPT3 = new HashMap<>();
 		int count = 0;
-		HashSet<DrugNode> drugList1 = new HashSet<>();
-		HashSet<DrugNode> drugList2 = new HashSet<>();
-		HashSet<SideEffect> seList = new HashSet<>();
+		this.iClosenessPT3 = new HashMap<>();
+		ArrayList<Integer> iCloseness;
 		for(Indication i:dg.gIndication){
-			count = 0;
-			drugList1 = i.drugName;
-			for(DrugNode drugNode:drugList1){
-				seList = drugNode.sideEffect;
-				for(SideEffect se:seList){
-					drugList2 = se.drugName;
-					count += drugList2.size();
+			iCloseness = new ArrayList<>();
+			for(DrugNode d1:i.drugName){
+				count = 0;
+				for(DrugNode d2:i.drugName){
+					if(d1.name.equals(d2.name))
+						continue;
+					for(SideEffect sideEffect:d2.sideEffect){
+						if(sideEffect.containsDrug(d1.name) != null)
+							count++;
+					}
 				}
+				iCloseness.add(count);
 			}
-			iClosenessPT3.put(i.name, count);
+			iClosenessPT3.put(i.name,iCloseness);
 		}
 	}
 
 	//Drug Interaction
 	//Drug Interaction PathTypes -> D-D-D(PT1), D-I-D-D(PT2), D-SE-D-D(PT3)
-
-
 	public void setDDClosenessPT1(DrugGraph dg){
-		ddClosenessPT1 = new HashMap<>();
 		int count = 0;
-		HashSet<DrugNode> drugList1 = new HashSet<>();
-		HashSet<DrugNode> drugList2 = new HashSet<>();
-		for(DrugNode drug:dg.gDrug){
-			count = 0;
-			drugList1 = drug.drugInteraction;
-			for(DrugNode drugNode:drugList1){
-				drugList2 = drugNode.drugInteraction;
-				count += drugList2.size();
+		this.ddClosenessPT1 = new HashMap<>();
+		ArrayList<Integer> ddCloseness;
+		for(DrugNode dd:dg.gDrug){
+			ddCloseness = new ArrayList<>();
+			for(DrugNode d1:dd.drugInteraction){
+				count = 0;
+				for(DrugNode d2:dd.drugInteraction){
+					if(d1.name.equals(d2.name))
+						continue;
+					if(d2.containsDD(d1.name) != null)
+						count++;
+				}
+				ddCloseness.add(count);
 			}
-			ddClosenessPT1.put(drug.name, count);
+			ddClosenessPT1.put(dd.name, ddCloseness);
 		}
 	}
 
+ 	//D-I-D-D(PT2)
 	public void setDDClosenessPT2(DrugGraph dg){
-		ddClosenessPT2 = new HashMap<>();
 		int count = 0;
-		HashSet<DrugNode> drugList1 = new HashSet<>();
-		HashSet<DrugNode> drugList2 = new HashSet<>();
-		HashSet<Indication> iList = new HashSet<>();
-		for(DrugNode drug:dg.gDrug){
-			count = 0;
-			drugList1 = drug.drugInteraction;
-			for(DrugNode drugNode:drugList1){
-				iList = drugNode.indication;
-				for(Indication i:iList){
-					drugList2 = i.drugName;
-					count += drugList2.size();
+		this.ddClosenessPT2 = new HashMap<>();
+		ArrayList<Integer> ddCloseness;
+		for(DrugNode dd:dg.gDrug){
+			ddCloseness = new ArrayList<>();
+			for(DrugNode d1:dd.drugInteraction){
+				count = 0;
+				for(DrugNode d2:dd.drugInteraction){
+					if(d1.name.equals(d2.name))
+						continue;
+					for(Indication i:d2.indication){
+						if(i.containsDrug(d1.name) != null)
+							count++;
+					}
 				}
+				ddCloseness.add(count);
 			}
-			ddClosenessPT2.put(drug.name, count);
+			ddClosenessPT2.put(dd.name,ddCloseness);
 		}
 	}
 
+	//D-SE-D-D(PT3)
 	public void setDDClosenessPT3(DrugGraph dg){
-		ddClosenessPT3 = new HashMap<>();
-		HashMap<SideEffect,Integer> closeness = new HashMap<>();
 		int count = 0;
-		HashSet<DrugNode> drugList1 = new HashSet<>();
-		HashSet<DrugNode> drugList2 = new HashSet<>();
-		HashSet<SideEffect> seList = new HashSet<>();
-		for(DrugNode drug:dg.gDrug){
-			count = 0;
-			drugList1 = drug.drugInteraction;
-			for(DrugNode drugNode:drugList1){
-				seList = drugNode.sideEffect;
-				for(SideEffect se:seList){
-					drugList2 = se.drugName;
-					count += drugList2.size();
+		this.ddClosenessPT3 = new HashMap<>();
+		ArrayList<Integer> ddCloseness;
+		for(DrugNode dd:dg.gDrug){
+			ddCloseness = new ArrayList<>();
+			for(DrugNode d1:dd.drugInteraction){
+				count = 0;
+				for(DrugNode d2:dd.drugInteraction){
+					if(d1.name.equals(d2.name))
+						continue;
+					for(SideEffect sideEffect:d2.sideEffect){
+						if(sideEffect.containsDrug(d1.name) != null)
+							count++;
+					}
 				}
+				ddCloseness.add(count);
 			}
-			ddClosenessPT3.put(drug.name, count);
+			ddClosenessPT3.put(dd.name,ddCloseness);
 		}
 	}
- 
 
 
-
-	public static void main(String[] args) throws IOException,ClassNotFoundException{
+	public static void main(String[] args) throws IOException,ClassNotFoundException,SizeNotMatchedException{
 		SaveData sd = new SaveData("drugDump.txt");
 		DrugGraph dg = (DrugGraph)sd.getData();
-
-		Closeness closeness = new Closeness();
-		closeness.setSEClosenessPT1(dg);
-		closeness.setSEClosenessPT2(dg);
-		closeness.setSEClosenessPT3(dg);
-		closeness.setIClosenessPT1(dg);
-		closeness.setIClosenessPT2(dg);
-		closeness.setIClosenessPT3(dg);
-		closeness.setDDClosenessPT1(dg);
-		closeness.setDDClosenessPT2(dg);
-		closeness.setDDClosenessPT3(dg);
-		
-		System.out.println(closeness.seClosenessPT1);
-		System.out.println(closeness.seClosenessPT2);
-		System.out.println(closeness.seClosenessPT3);
-		System.out.println(closeness.iClosenessPT1);
-		System.out.println(closeness.iClosenessPT2);
-		System.out.println(closeness.iClosenessPT3);
-		System.out.println(closeness.ddClosenessPT1);
-		System.out.println(closeness.ddClosenessPT2);
-		System.out.println(closeness.ddClosenessPT3);
-
-		sd = new SaveData("closeness.txt");
-		sd.saveData(closeness);
-
-		System.out.println("----------------------------------------------");
-		System.out.println(closeness.getCloseness("SideEffect","se1"));
-
-		/*
-		closeness = (Closeness)sd.getData();
-		System.out.println(closeness.seClosenessPT3);*/
+		Closeness cl = new Closeness();
+		cl.setSEClosenessPT1(dg);
+		cl.setSEClosenessPT2(dg);
+		cl.setSEClosenessPT3(dg);
+		cl.setIClosenessPT1(dg);
+		cl.setIClosenessPT2(dg);
+		cl.setIClosenessPT3(dg);
+		cl.setDDClosenessPT1(dg);
+		cl.setDDClosenessPT2(dg);
+		cl.setDDClosenessPT3(dg);
+		PrepareTrainingInstances pt = new PrepareTrainingInstances();
+		pt.makeInstances(dg,cl);
+		sd = new SaveData("train_instances.txt");
+		pt = (PrepareTrainingInstances)sd.getData();
+		System.out.println(pt);
+		//System.out.println(cl.ddClosenessPT1);
+		//System.out.println(cl.ddClosenessPT2);
 	}
 }

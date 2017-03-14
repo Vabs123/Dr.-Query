@@ -1,11 +1,11 @@
 import java.util.*;
 class NegativeEdge{
 
-	HashSet<String>sideEffect;
-	HashSet<String>drugInteraction;
+	LinkedList<String>sideEffect;
+	LinkedList<String>drugInteraction;
 	
 	NegativeEdge(){
-		sideEffect = new HashSet<>();
-		drugInteraction = new HashSet<>();
+		sideEffect = new LinkedList<>();
+		drugInteraction = new LinkedList<>();
 	}
 }

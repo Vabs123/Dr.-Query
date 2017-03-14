@@ -2,18 +2,18 @@ import java.util.*;
 import java.io.*;
 
 class DrugGraph implements Serializable{
-	HashSet<DrugNode> gDrug;
-	HashSet<SideEffect> gSideEffect;
-	HashSet<Indication> gIndication;
-	HashSet<Target> gTarget;
-	HashSet<Pathway> gPathway;
+	LinkedList<DrugNode> gDrug;
+	LinkedList<SideEffect> gSideEffect;
+	LinkedList<Indication> gIndication;
+	LinkedList<Target> gTarget;
+	LinkedList<Pathway> gPathway;
 
 	DrugGraph(){
-		gDrug = new HashSet<>();
-		gSideEffect = new HashSet<>();
-		gIndication = new HashSet<>();
-		gTarget = new HashSet<>();
-		gPathway = new HashSet<>();
+		gDrug = new LinkedList<>();
+		gSideEffect = new LinkedList<>();
+		gIndication = new LinkedList<>();
+		gTarget = new LinkedList<>();
+		gPathway = new LinkedList<>();
 	}
 
 	public SideEffect containsSE(String sname){
@@ -66,7 +66,7 @@ class DrugGraph implements Serializable{
 		return null;
 	}
 
-	public void addSideEffect(DrugNode drugNode, HashSet<String> se){//If drugs are not unique make a check function so that the twice 
+	public void addSideEffect(DrugNode drugNode, LinkedList<String> se){//If drugs are not unique make a check function so that the twice 
 		//twice entry of a drug in sideeffect list can be avoided...
 		SideEffect sEffect;
 		for(String s:se){
@@ -81,7 +81,7 @@ class DrugGraph implements Serializable{
 		}
 	}
 
-	public void addIndication(DrugNode drugNode, HashSet<String> i){
+	public void addIndication(DrugNode drugNode, LinkedList<String> i){
 		Indication ind;
 		for(String s:i){
 			ind = containsI(s);
@@ -95,7 +95,7 @@ class DrugGraph implements Serializable{
 		}
 	}
 
-	public void addTarget(DrugNode drugNode, HashSet<String> t){
+	public void addTarget(DrugNode drugNode, LinkedList<String> t){
 		Target tar;
 		for(String s:t){
 			tar = containsT(s);
@@ -109,7 +109,7 @@ class DrugGraph implements Serializable{
 		}
 	}
 
-	public void addPathway(DrugNode drugNode, HashSet<String> p){
+	public void addPathway(DrugNode drugNode, LinkedList<String> p){
 		Pathway path;
 		for(String s:p){
 			path = containsP(s);
@@ -123,7 +123,7 @@ class DrugGraph implements Serializable{
 		}
 	}
 
-	public void addDrugInteraction(DrugNode drugNode, HashSet<String> d_d){
+	public void addDrugInteraction(DrugNode drugNode, LinkedList<String> d_d){
 		DrugNode dNode;
 		for(String s:d_d){
 			dNode = containsD(s);
@@ -138,7 +138,7 @@ class DrugGraph implements Serializable{
 
 
 
-	public void create(String drugName, HashSet<String> sEffect, HashSet<String> indi, HashSet<String> tar, HashSet<String> path, HashSet<String> drug_drug){
+	public void create(String drugName, LinkedList<String> sEffect, LinkedList<String> indi, LinkedList<String> tar, LinkedList<String> path, LinkedList<String> drug_drug){
 		// checkng if drug exists or not
 		DrugNode drugNode = containsD(drugName);
 
@@ -201,11 +201,11 @@ class DrugGraph implements Serializable{
 	
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
-		HashSet<String> se = new HashSet<>();
-		HashSet<String> i = new HashSet<>();
-		HashSet<String> t = new HashSet<>();
-		HashSet<String> p = new HashSet<>();
-		HashSet<String> d_d = new HashSet<>();
+		LinkedList<String> se = new LinkedList<>();
+		LinkedList<String> i = new LinkedList<>();
+		LinkedList<String> t = new LinkedList<>();
+		LinkedList<String> p = new LinkedList<>();
+		LinkedList<String> d_d = new LinkedList<>();
 		se.add("se1");
 		se.add("se2");
 		se.add("se3");
@@ -233,11 +233,11 @@ class DrugGraph implements Serializable{
 
 
 
-		 se = new HashSet<>();
-		 i = new HashSet<>();
-		 t = new HashSet<>();
-		 p = new HashSet<>();
-	    d_d = new HashSet<>();
+		 se = new LinkedList<>();
+		 i = new LinkedList<>();
+		 t = new LinkedList<>();
+		 p = new LinkedList<>();
+	    d_d = new LinkedList<>();
 		se.add("se1");
 		se.add("se5");
 		se.add("se6");

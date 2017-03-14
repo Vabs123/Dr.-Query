@@ -15,12 +15,37 @@ class Test{
 		return o;
 	}
 
-	public static void main(String[] args) throws IOException,ClassNotFoundException{
-		HashMap<String, Integer> data = new HashMap<>();
-		data.put("hello",1);
-		Test t = new Test();
-		t.save(data);
-		data = (HashMap<String, Integer>)t.get();
-		System.out.println(data); 
+	public ArrayList<Integer> getData(){
+		ArrayList<Integer> a = new ArrayList<Integer>();
+		a.add(5);
+		return a;
+	}
+	public ArrayList<Integer> getData1(){
+		ArrayList<Integer> a = new ArrayList<Integer>();
+		a.add(9);
+		return a;
+	}
+
+	public static void main(String[] args) throws IOException,ClassNotFoundException,MyException{
+		HashMap<String, ArrayList<Integer>> data = new HashMap<>();
+		ArrayList<Integer> al;
+
+		/*Test t = new Test();
+		al = t.getData();
+		data.put("ye",al);
+		al = t.getData1();
+		data.put("dekho",al);
+		System.out.println(data);*/
+		if(1 != 2)
+			throw new MyException("hahaha");
+		//t.save(data);
+		//data = (HashMap<String, Integer>)t.get();
+		//System.out.println(data); 
+	}
+}
+
+class MyException extends Exception{
+	MyException(String s){
+		super(s);
 	}
 }

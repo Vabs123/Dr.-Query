@@ -3,11 +3,11 @@ import java.io.*;
 
 class Pathway implements Serializable{
 	String name;
-	HashSet<DrugNode> drugName;
+	LinkedList<DrugNode> drugName;
 
 	Pathway(String pathway){
 		name = pathway;
-		drugName = new HashSet<>();
+		drugName = new LinkedList<>();
 	}
 
 	@Override

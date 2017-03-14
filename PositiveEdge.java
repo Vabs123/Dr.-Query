@@ -2,9 +2,9 @@ import java.util.*;
 
 class PositiveEdge{
 
-	HashSet<String> indication ;
+	LinkedList<String> indication ;
 
 	PositiveEdge(){
-		indication = new HashSet<>();
+		indication = new LinkedList<>();
 	}
 }

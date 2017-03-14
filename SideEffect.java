@@ -3,10 +3,18 @@ import java.io.*;
 
 class SideEffect implements Serializable{
 	String name;
-	HashSet<DrugNode> drugName;
+	LinkedList<DrugNode> drugName;
 	SideEffect(String sideEffect){
 		name = sideEffect;
-		drugName = new HashSet<>();
+		drugName = new LinkedList<>();
+	}
+
+	public DrugNode containsDrug(String d){
+		for(DrugNode drug:this.drugName){
+			if(drug.name.equals(d))
+				return drug;
+		}
+		return null;
 	}
 
 	@Override
