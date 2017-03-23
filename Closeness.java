@@ -221,7 +221,7 @@ class Closeness implements Serializable{
 
 
 	public static void main(String[] args) throws IOException,ClassNotFoundException,SizeNotMatchedException{
-		SaveData sd = new SaveData("drugDump.txt");
+		SaveData sd = new SaveData("drug_graph.txt");
 		DrugGraph dg = (DrugGraph)sd.getData();
 		Closeness cl = new Closeness();
 		cl.setSEClosenessPT1(dg);
@@ -233,12 +233,13 @@ class Closeness implements Serializable{
 		cl.setDDClosenessPT1(dg);
 		cl.setDDClosenessPT2(dg);
 		cl.setDDClosenessPT3(dg);
-		PrepareTrainingInstances pt = new PrepareTrainingInstances();
-		pt.makeInstances(dg,cl);
+		//PrepareInstances pt = new PrepareInstances();
+		//pt.makeTrainingInstances(dg,cl);
 		sd = new SaveData("train_instances.txt");
-		pt = (PrepareTrainingInstances)sd.getData();
-		System.out.println(pt);
-		//System.out.println(cl.ddClosenessPT1);
-		//System.out.println(cl.ddClosenessPT2);
+	PrepareInstances pt = (PrepareInstances)sd.getData();
+		System.out.println(pt.ddPerNodeTrainInput);
+		/*System.out.println(cl.ddClosenessPT1);
+		System.out.println("-----------------------------------------------------------------------------------------------------------------------------");
+		System.out.println(cl.ddClosenessPT2);*/
 	}
 }

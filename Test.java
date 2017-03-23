@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-class Test implements Serializable{
+class Test implements Serializable,Cloneable{
 	int x;
 	
 	public void save(Object o)throws IOException{
@@ -27,10 +27,16 @@ class Test implements Serializable{
 		return a;
 	}
 
-	public void day()throws Exception{
-		x = 20;
-		SaveData sd = new SaveData("test.txt");
-		sd.saveData(this);
+	public static void day(String s,boolean f){
+		if(f)
+			System.out.println(s);
+		else
+			System.out.println("yeah");
+	}
+
+	@Override
+	public Object clone()throws CloneNotSupportedException{
+		return super.clone();
 	}
 
 	public static void main(String[] args) throws Exception{
@@ -49,13 +55,9 @@ class Test implements Serializable{
 		//t.save(data);
 		//data = (HashMap<String, Integer>)t.get();
 		//System.out.println(data); 
-		ArrayList<Integer> a = new ArrayList<>();
-		a.add(1);
-		a.add(2);
-		a.add(3);
-		a.add(4);
-		String s = a.toString();
-		System.out.println(s);
+	
+		day("hello",true);
+		day("",false);
 
 	}
 }

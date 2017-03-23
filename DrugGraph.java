@@ -138,7 +138,7 @@ class DrugGraph implements Serializable{
 
 
 
-	public void create(String drugName, LinkedList<String> sEffect, LinkedList<String> indi, LinkedList<String> tar, LinkedList<String> path, LinkedList<String> drug_drug){
+	public void create(String drugName, LinkedList<String> sEffect, LinkedList<String> indi, LinkedList<String> drug_drug){
 		// checkng if drug exists or not
 		DrugNode drugNode = containsD(drugName);
 
@@ -149,36 +149,37 @@ class DrugGraph implements Serializable{
 		}
 		addSideEffect(drugNode, sEffect);
 		addIndication(drugNode, indi);
-		addTarget(drugNode, tar);
-		addPathway(drugNode, path);
+		//addTarget(drugNode, tar);
+		//addPathway(drugNode, path);
 		addDrugInteraction(drugNode, drug_drug);	
 	}
 
 
 	public void printDrug(DrugNode drug){
+		System.out.println(drug.name+"------------------------------------------------------------------------------------------->");
 		printSE(drug);
 		printI(drug);
-		printT(drug);
-		printP(drug);
+		//printT(drug);
+		//printP(drug);
 		printd_d(drug);
 	}
 
 	public void printSE(DrugNode d){
-		System.out.println(d.name+" - SideEffects --->");
+		System.out.println(d.name+" - SideEffects ------------------------------------------------------------------------------->");
 		for(SideEffect se:d.sideEffect){
 			System.out.println(se.name);
 		}
 	}
 
 	public void printT(DrugNode d){
-		System.out.println(d.name+" - Targets --->");
+		System.out.println(d.name+" - Targets ---------------------------------------------------------------------------------->");
 		for(Target se:d.target){
 			System.out.println(se.name);
 		}
 	}
 
 	public void printI(DrugNode d){
-		System.out.println(d.name+" - Indications --->");
+		System.out.println(d.name+" - Indications -------------------------------------------------------------------------------->");
 		for(Indication se:d.indication){
 			System.out.println(se.name);
 		}
@@ -200,7 +201,7 @@ class DrugGraph implements Serializable{
 
 	
 
-	public static void main(String[] args) throws IOException, ClassNotFoundException {
+	/*public static void main(String[] args) throws IOException, ClassNotFoundException {
 		LinkedList<String> se = new LinkedList<>();
 		LinkedList<String> i = new LinkedList<>();
 		LinkedList<String> t = new LinkedList<>();
@@ -264,7 +265,7 @@ class DrugGraph implements Serializable{
 
 	//	SaveData sd = new SaveData(dg.gDrug, dg.gSideEffect, dg.gIndication, dg.gTarget, dg.gPathway);
 	//	sd.save();
-		SaveData sd = new SaveData("drugDump.txt");
+		SaveData sd = new SaveData("drug_graph.txt");
 		sd.saveData(dg);
 		dg = (DrugGraph)sd.getData();
 
@@ -275,7 +276,7 @@ class DrugGraph implements Serializable{
 		dg.gPathway = sd.pathwayList;*/
 
 
-		System.out.println("Drugs ---------------------------->");
+	/*	System.out.println("Drugs ---------------------------->");
 
 		for(DrugNode d:dg.gDrug){
 			dg.printDrug(d);
@@ -322,6 +323,6 @@ class DrugGraph implements Serializable{
 		}*/
 
 
-	}
+	//}
 	
 }

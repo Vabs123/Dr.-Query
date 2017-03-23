@@ -1,6 +1,12 @@
 import java.util.*;
 import java.io.*;
 
+/***********************************************
+*These candidates will be used during testing.
+*Here we are finding candidates of particular
+ type and keyword
+***********************************************/
+
 class CandidateMatch{
 	LinkedList<SideEffect> seCandidates;
 	LinkedList<DrugNode> ddCandidates;
@@ -31,10 +37,10 @@ class CandidateMatch{
 	public static void main(String[] args) throws IOException,ClassNotFoundException{
 		VariableNode v = new VariableNode();
 		LinkedList<String> seee = new LinkedList<>();
-		seee.add("i1");
-		seee.add("i4");
+		seee.add("morning sickness");
+		seee.add("nausea");
 		v.addIndication(seee);
-		SaveData sd = new SaveData("drugDump.txt");
+		SaveData sd = new SaveData("drug_graph.txt");
 		DrugGraph dg = (DrugGraph)sd.getData();
 		
 
