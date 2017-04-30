@@ -2,6 +2,7 @@ import java.util.*;
 import java.io.*;
 
 class Closeness implements Serializable{
+	private static final long serialVersionUID = 3L;
 	HashMap<String, ArrayList<Integer>> seClosenessPT1;
 	HashMap<String, ArrayList<Integer>> seClosenessPT2;
 	HashMap<String, ArrayList<Integer>> seClosenessPT3;
@@ -14,7 +15,8 @@ class Closeness implements Serializable{
 	
 	//SideEffect PathTypes -> D-D-SE(PathType1), D-I-D-SE(PathType2), D-SE-D-SE(PathType3)
 	// Only Path count is used as metric for closeness
-	
+	//Implementation of Selective Breadth First Search Algorithm
+
 	public void setSEClosenessPT1(DrugGraph dg){
 		int count = 0;
 		this.seClosenessPT1 = new HashMap<>();
@@ -24,8 +26,8 @@ class Closeness implements Serializable{
 			for(DrugNode d1:se.drugName){
 				count = 0;
 				for(DrugNode d2:se.drugName){
-					if(d1.name.equals(d2.name))
-						continue;
+					//if(d1.name.equals(d2.name))
+					//	continue;
 					if(d2.containsDD(d1.name) != null)
 						count++;
 				}
@@ -44,8 +46,8 @@ class Closeness implements Serializable{
 			for(DrugNode d1:se.drugName){
 				count = 0;
 				for(DrugNode d2:se.drugName){
-					if(d1.name.equals(d2.name))
-						continue;
+					//if(d1.name.equals(d2.name))
+					//	continue;
 					for(Indication i:d2.indication){
 						if(i.containsDrug(d1.name) != null)
 							count++;
@@ -67,8 +69,8 @@ class Closeness implements Serializable{
 			for(DrugNode d1:se.drugName){
 				count = 0;
 				for(DrugNode d2:se.drugName){
-					if(d1.name.equals(d2.name))
-						continue;
+					//if(d1.name.equals(d2.name))
+					//	continue;
 					for(SideEffect sideEffect:d2.sideEffect){
 						if(sideEffect.containsDrug(d1.name) != null)
 							count++;
@@ -94,8 +96,8 @@ class Closeness implements Serializable{
 			for(DrugNode d1:i.drugName){
 				count = 0;
 				for(DrugNode d2:i.drugName){
-					if(d1.name.equals(d2.name))
-						continue;
+				//	if(d1.name.equals(d2.name))
+				//		continue;
 					if(d2.containsDD(d1.name) != null)
 						count++;
 				}
@@ -115,8 +117,8 @@ class Closeness implements Serializable{
 			for(DrugNode d1:indi.drugName){
 				count = 0;
 				for(DrugNode d2:indi.drugName){
-					if(d1.name.equals(d2.name))
-						continue;
+				//	if(d1.name.equals(d2.name))
+				//		continue;
 					for(Indication i:d2.indication){
 						if(i.containsDrug(d1.name) != null)
 							count++;
@@ -138,8 +140,8 @@ class Closeness implements Serializable{
 			for(DrugNode d1:i.drugName){
 				count = 0;
 				for(DrugNode d2:i.drugName){
-					if(d1.name.equals(d2.name))
-						continue;
+					//if(d1.name.equals(d2.name))
+					//	continue;
 					for(SideEffect sideEffect:d2.sideEffect){
 						if(sideEffect.containsDrug(d1.name) != null)
 							count++;
@@ -162,8 +164,9 @@ class Closeness implements Serializable{
 			for(DrugNode d1:dd.drugInteraction){
 				count = 0;
 				for(DrugNode d2:dd.drugInteraction){
-					if(d1.name.equals(d2.name))
-						continue;
+				//	if(d1.name.equals(d2.name))
+				//		continue;
+					//System.out.println("Drug 2 = "+d2.name+"Drug 1 = "+d1.name);
 					if(d2.containsDD(d1.name) != null)
 						count++;
 				}
@@ -183,8 +186,8 @@ class Closeness implements Serializable{
 			for(DrugNode d1:dd.drugInteraction){
 				count = 0;
 				for(DrugNode d2:dd.drugInteraction){
-					if(d1.name.equals(d2.name))
-						continue;
+					//if(d1.name.equals(d2.name))
+					//	continue;
 					for(Indication i:d2.indication){
 						if(i.containsDrug(d1.name) != null)
 							count++;
@@ -206,8 +209,8 @@ class Closeness implements Serializable{
 			for(DrugNode d1:dd.drugInteraction){
 				count = 0;
 				for(DrugNode d2:dd.drugInteraction){
-					if(d1.name.equals(d2.name))
-						continue;
+					//if(d1.name.equals(d2.name))
+					//	continue;
 					for(SideEffect sideEffect:d2.sideEffect){
 						if(sideEffect.containsDrug(d1.name) != null)
 							count++;

@@ -16,6 +16,10 @@ class DrugGraph implements Serializable{
 		gPathway = new LinkedList<>();
 	}
 
+	public LinkedList<DrugNode> getDrugs(){
+		return this.gDrug;
+	}
+
 	public SideEffect containsSE(String sname){
 		Iterator<SideEffect> it = gSideEffect.iterator();
 		while(it.hasNext()){

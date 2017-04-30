@@ -3,6 +3,7 @@ import java.io.*;
 
 
 class PrepareInstances implements Serializable{
+	private static final long serialVersionUID = 2L;
 	HashMap<String, LinkedList<TrainInput>> sePerNodeTrainInput;  
 	HashMap<String, LinkedList<TrainInput>> iPerNodeTrainInput;
 	HashMap<String, LinkedList<TrainInput>> ddPerNodeTrainInput;
@@ -84,6 +85,68 @@ class PrepareInstances implements Serializable{
 		SaveData sd = new SaveData("train_instances.txt");
 		sd.saveData(this);
 	}
+
+	public static TrainInput getTestInstance(DrugGraph dg, String drugName, String drugProperty, String propertyType)throws Exception{
+		SideEffect se = null;
+		DrugNode dd = null;
+		Indication i = null;
+		int closenessPT1 = 0, closenessPT2= 0, closenessPT3 = 0;
+		if(propertyType.equals("SideEffect")){
+			se = dg.containsSE(drugProperty);
+			if(se == null)
+				throw new Exception("SideEffect not found");
+			for(DrugNode d:se.drugName){
+				if(d.containsDD(drugName) != null)
+					closenessPT1++;
+				for(Indication indi:d.indication){
+					if(indi.containsDrug(drugName) != null)
+						closenessPT2++;
+				}
+				for(SideEffect sE:d.sideEffect){
+					if(sE.containsDrug(drugName) != null)
+						closenessPT3++;
+				}
+			}
+		}
+		else if(propertyType.equals("DrugInteraction")){
+			dd = dg.containsD(drugProperty);
+			if(dd == null)
+				throw new Exception("DrugInteraction not found");
+			for(DrugNode d:dd.drugInteraction){
+				if(d.containsDD(drugName) != null)
+					closenessPT1++;
+				for(Indication indi:d.indication){
+					if(indi.containsDrug(drugName) != null)
+						closenessPT2++;
+				}
+				for(SideEffect sE:d.sideEffect){
+					if(sE.containsDrug(drugName) != null)
+						closenessPT3++;
+				}
+			}
+		}
+		else if(propertyType.equals("Indication")){
+			i = dg.containsI(drugProperty);
+			if(i == null)
+				throw new Exception("Indication not found");
+			for(DrugNode d:i.drugName){
+				if(d.containsDD(drugName) != null)
+					closenessPT1++;
+				for(Indication indi:d.indication){
+					if(indi.containsDrug(drugName) != null)
+						closenessPT2++;
+				}
+				for(SideEffect sE:d.sideEffect){
+					if(sE.containsDrug(drugName) != null)
+						closenessPT3++;
+				}
+			}
+		}
+		else
+			throw new TypeNotMatchedException("Please enter a valid type.");
+		return new TrainInput(closenessPT1, closenessPT2, closenessPT3);
+	}
+
 
 	@Override
 	public String toString(){

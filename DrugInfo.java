@@ -32,12 +32,24 @@ class DrugInfo implements Serializable
 	{
 		return this.listofDrugInteraction;
 	}
+
+	@Override
 	public String toString() {
 		String s= this.drugName;
 		/*StringBuilder sb = new StringBuilder(s);
 		sb.append("\n");
 		sb.append("-----------------------------------------\n");*/
         return s;
+    }
+
+    @Override
+    public boolean equals(Object o){
+    	return this.drugName.equals(((DrugInfo)o).drugName);
+    }
+
+    @Override
+    public int hashCode(){
+    	return this.drugName.hashCode();
     }
 
 }

@@ -13,7 +13,8 @@ import java.io.*;
 
 
 //Implementation of Per Node training model
-class PrepareModel{
+class PrepareModel implements Serializable{
+	private static final long serialVersionUID = 1L;
 	HashMap<String, Classifier> sePerNodeModel;
 	HashMap<String, Classifier> iPerNodeModel;
 	HashMap<String, Classifier> ddPerNodeModel;
@@ -26,6 +27,30 @@ class PrepareModel{
 		iPerNodeModel = new HashMap<>();
 		ddPerNodeModel = new HashMap<>();
 	}
+
+	public Classifier getPerNodeModel( String keyword, String type) throws Exception{
+		if(type.equals("SideEffect"))
+			return sePerNodeModel.get(keyword);
+		else if(type.equals("Indication"))
+			return iPerNodeModel.get(keyword);
+		else if(type.equals("DrugInteraction"))
+			return ddPerNodeModel.get(keyword);
+		else
+			throw new TypeNotMatchedException("Please enter a valid type");
+	}
+
+	public Classifier getPerTypeModel(String type)throws Exception{
+		if(type.equals("SideEffect"))
+			return sePerTypeModel;
+		else if(type.equals("Indication"))
+			return iPerTypeModel;
+		else if(type.equals("DrugInteraction"))
+			return ddPerTypeModel;
+		else
+			throw new TypeNotMatchedException("Please enter a valid type");
+	}
+
+
 
 	//method for preparing instances set for input 
 	public Instances prepareInstance(PrepareInstances trainingInstances, FastVector modelAttributes,
@@ -56,7 +81,8 @@ class PrepareModel{
 	}
 	
 	//method for preparing side effect model
-	public void prepareSEModel(PrepareInstances trainingInstances, FastVector modelAttributes, DrugGraph dg, Classifier cModel) throws Exception{
+	public void prepareSEModel(PrepareInstances trainingInstances, FastVector modelAttributes, DrugGraph dg, 
+	 Classifier cModel) throws Exception{
 	//	sePerNodeModel = new HashMap<>();
 		Classifier copyModel = null;
 		Instances trainingSet = null;
@@ -74,7 +100,8 @@ class PrepareModel{
 	}
 
 	//method for preparing indication model
-	public void prepareIModel(PrepareInstances trainingInstances, FastVector modelAttributes, DrugGraph dg, Classifier cModel) throws Exception{
+	public void prepareIModel(PrepareInstances trainingInstances, FastVector modelAttributes, DrugGraph dg,
+	 Classifier cModel) throws Exception{
 		//iPerNodeModel = new HashMap<>();
 		Classifier copyModel = null;
 		Instances trainingSet = null;
@@ -92,24 +119,25 @@ class PrepareModel{
 	}
 
 	//method for preparing drug interaction model
-	public void prepareDDModel(PrepareInstances trainingInstances, FastVector modelAttributes, DrugGraph dg, Classifier cModel) throws Exception{
+	public void prepareDDModel(PrepareInstances trainingInstances, FastVector modelAttributes, DrugGraph dg,
+	 Classifier cModel) throws Exception{
 		//ddPerNodeModel = new HashMap<>();
 		Classifier copyModel = null;
 		Instances trainingSet = null;
 		//per node model preparation
-		for(DrugNode dd:dg.gDrug){
+		/*for(DrugNode dd:dg.gDrug){
 			copyModel = AbstractClassifier.makeCopy(cModel);
 			trainingSet = prepareInstance(trainingInstances, modelAttributes, "DrugInteraction", dd.name, true);
 			copyModel.buildClassifier(trainingSet);
 			ddPerNodeModel.put(dd.name,copyModel);
-		}
+		}*/
 		//per type model preparation
 		trainingSet = prepareInstance(trainingInstances, modelAttributes, "DrugInteraction","", false);
 		ddPerTypeModel = AbstractClassifier.makeCopy(cModel);
 		ddPerTypeModel.buildClassifier(trainingSet);
 	}
 
-	public void prepareModel(Classifier cModel) throws Exception{
+	public void prepareModel(Classifier cModel, DrugGraph dg) throws Exception{
 		//Declaring numeric attributes
 		Attribute attribute1 = new Attribute("firstCloseness");
 		Attribute attribute2 = new Attribute("secondCloseness");
@@ -126,15 +154,15 @@ class PrepareModel{
 		fvModelAttributes.addElement(attribute3);
 		fvModelAttributes.addElement(classAttribute);
 		//declare the drugGraph object
-		SaveData sd = new SaveData("drug_graph.txt");
-		DrugGraph dg = (DrugGraph)sd.getData();
+		//SaveData sd = new SaveData("drug_graph.txt");
+		//DrugGraph dg = (DrugGraph)sd.getData();
 		//declare the PrepareInstances object
-		sd = new SaveData("train_instances.txt");
+		SaveData sd = new SaveData("train_instances.txt");
 		PrepareInstances trainingInstances = (PrepareInstances)sd.getData();
 
-		prepareSEModel(trainingInstances, fvModelAttributes, dg, cModel);
-		prepareIModel(trainingInstances, fvModelAttributes, dg, cModel);
-		//prepareDDModel(trainingInstances, fvModelAttributes, dg, cModel);
+		//prepareSEModel(trainingInstances, fvModelAttributes, dg, cModel);
+		//prepareIModel(trainingInstances, fvModelAttributes, dg, cModel);
+		prepareDDModel(trainingInstances, fvModelAttributes, dg, cModel);
 
 	}
 
@@ -165,12 +193,15 @@ class PrepareModel{
 		
 	} 
 
-	public static void main(String[] args) throws Exception{
+/*	public static void main(String[] args) throws Exception{
 
-		Classifier cModel = (Classifier)new Logistic();
+	/*	Classifier cModel = (Classifier)new Logistic();
 		PrepareModel model = new PrepareModel();
 		model.prepareModel(cModel);
 		System.out.println(model);
+
+		SaveData sd = new SaveData("ml_model.txt");
+		sd.saveData(model);
 
 		/*Attribute attribute1 = new Attribute("firstCloseness");
 		Attribute attribute2 = new Attribute("secondCloseness");
@@ -246,5 +277,5 @@ class PrepareModel{
 		double[] fDistribution = cModel.distributionForInstance(iUse);
 		System.out.println("Likelihood = "+fDistribution[0]);*/
 		//System.out.println(cModel);*/
-	}
+	//}
 }
